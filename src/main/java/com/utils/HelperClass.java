@@ -1,35 +1,24 @@
-/*
- * This is a Java Helper Class with all core functions/methods for this project 'Backend Test Challenge - FreeNow'
- * search by User and return the userNameList/boolean
- * Find the Id for a particular user and return as integer value
- * Find the PostId for a particular userId and return as integer array
- * Fetch the Comments content for each postIds of a particular UserId and return as Array of Strings
- * Fetch the EmaiAddresses for each postIds of a particular UserId and return as Array of Strings
- */
-package com.sindhu.utils;
+package com.utils;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import io.restassured.RestAssured;
 import org.testng.Assert;
 
-import io.restassured.RestAssured;
+import static io.restassured.RestAssured.*;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 import java.util.regex.*;
 
-public class HelperMethods {
+public class HelperClass {
 
 	public static String searchUser(String searchUserName) throws MalformedURLException {
-		/*
-		 * Search By User Method to find a particular user given the userName as input
-		 * argument from the '/users' API response content
-		 */
 
-		RestAssured.baseURI = "https://jsonplaceholder.typicode.com";
+		baseURI = "https://jsonplaceholder.typicode.com";
 		RequestSpecification httpRequest = RestAssured.given();
 		Response response = httpRequest.get("/users");
 
@@ -49,12 +38,8 @@ public class HelperMethods {
 	}
 
 	public static int getUserId(String userName) throws MalformedURLException {
-		/*
-		 * Get the UserId for a particular user given the userName as input argument
-		 * from the '/users' API response content
-		 * 
-		 */
-		RestAssured.baseURI = "https://jsonplaceholder.typicode.com";
+
+		baseURI = "https://jsonplaceholder.typicode.com";
 		RequestSpecification httpRequest = RestAssured.given();
 		Response response = httpRequest.get("/users");
 
@@ -63,7 +48,6 @@ public class HelperMethods {
 
 		String responseString = response.body().asString();
 
-		// Fetching the UserId of a particular userName as given parameter
 
 		System.out.println("userName === " + userName);
 
@@ -83,18 +67,14 @@ public class HelperMethods {
 	}
 
 	public static Integer[] getPostId(int userId) throws MalformedURLException {
-		/*
-		 * Get the UserId for a particular user given the userName as input argument
-		 * from the '/posts' API response content
-		 */
 
-		RestAssured.baseURI = "https://jsonplaceholder.typicode.com";
+		baseURI = "https://jsonplaceholder.typicode.com";
 		RequestSpecification httpRequest = RestAssured.given();
 		Response response = httpRequest.get("/posts");
 
 		int code = response.getStatusCode();
 		System.out.println("Post Id : Status Code:" + code);
-		// Assert.assertEquals(code,200);
+
 
 		String responseString = response.asString();
 
@@ -108,18 +88,13 @@ public class HelperMethods {
 	}
 
 	public static ArrayList<String> getComments(Integer[] postId) throws MalformedURLException {
-		/*
-		 * Get the List of Comments for a particular user's posts given their postIds as
-		 * input argument from the '/comments' API response content
-		 */
 
-		RestAssured.baseURI = "https://jsonplaceholder.typicode.com";
+		baseURI = "https://jsonplaceholder.typicode.com";
 		RequestSpecification httpRequest = RestAssured.given();
 		Response response = httpRequest.get("/comments");
 
 		int code = response.getStatusCode();
 		System.out.println("Status Code:" + code);
-		// Assert.assertEquals(code,200);
 
 		String responseString = response.asString();
 		ArrayList<String> postsList = new ArrayList<String>();
@@ -136,12 +111,8 @@ public class HelperMethods {
 	}
 
 	public static ArrayList<String> getEmailAdresses(Integer[] PostId) throws MalformedURLException {
-		/*
-		 * Get the List of Email Addresses for a particular user's posts given their
-		 * postIds as input argument from the '/comments' API response content
-		 */
 
-		RestAssured.baseURI = "https://jsonplaceholder.typicode.com";
+		baseURI = "https://jsonplaceholder.typicode.com";
 		RequestSpecification httpRequest = RestAssured.given();
 		Response response = httpRequest.get("/comments");
 
@@ -164,12 +135,8 @@ public class HelperMethods {
 	}
 
 	public static ArrayList<String> getEmailAdressesByPostId(int PostId) throws MalformedURLException {
-		/*
-		 * Get the List of Email Addresses for a particular user's posts given their
-		 * postIds as input argument from the '/comments' API response content
-		 */
 
-		RestAssured.baseURI = "https://jsonplaceholder.typicode.com";
+		baseURI = "https://jsonplaceholder.typicode.com";
 		RequestSpecification httpRequest = RestAssured.given();
 		Response response = httpRequest.get("/comments");
 
@@ -219,28 +186,6 @@ public class HelperMethods {
 		}
 
 		return emailValidationResult;
-	}
-
-	public static void main(String[] args) throws MalformedURLException {
-
-		String UserName = "Samantha";
-		System.out.println("UserName====>" + UserName);
-		String searchResult = searchUser(UserName);
-		System.out.println(searchResult);
-
-		int getUserId = getUserId(UserName);
-		Integer postIds[] = getPostId(getUserId);
-		for (int pIds : postIds) {
-			System.out.println("Post Ids:" + pIds);
-		}
-
-		ArrayList<String> fetchListOfComments = getComments(postIds);
-//	displayStringList(fetchListOfComments);
-
-		ArrayList<String> fetchListOfEmails = getEmailAdresses(postIds);
-//	displayStringList(fetchListOfEmails);
-		boolean validEmailList = isValidEmailAddress(fetchListOfEmails);
-
 	}
 
 }
